@@ -99,6 +99,8 @@ namespace Microsoft.AspNetCore.Hosting.Internal
 
         public virtual void Start()
         {
+            HostingEventSource.Log.HostStart();
+
             Initialize();
 
             _logger = _applicationServices.GetRequiredService<ILogger<WebHost>>();
@@ -248,6 +250,8 @@ namespace Microsoft.AspNetCore.Hosting.Internal
             (_hostingServiceProvider as IDisposable)?.Dispose();
             (_applicationServices as IDisposable)?.Dispose();
             _applicationLifetime.NotifyStopped();
+
+            HostingEventSource.Log.HostStop();
         }
     }
 }
