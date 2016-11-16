@@ -59,7 +59,7 @@ namespace Microsoft.AspNetCore.Hosting.Internal
         }
 
         [Event(3, Level = EventLevel.Informational)]
-        public void RequestStart(
+        private void RequestStart(
             string requestTraceIdentifier,
             string protocol,
             string method,
