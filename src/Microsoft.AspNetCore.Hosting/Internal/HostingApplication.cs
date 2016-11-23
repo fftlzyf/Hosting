@@ -43,7 +43,7 @@ namespace Microsoft.AspNetCore.Hosting.Internal
                 _diagnosticSource.Write("Microsoft.AspNetCore.Hosting.BeginRequest", new { httpContext = httpContext, timestamp = startTimestamp });
             }
 
-            HostingEventSource.Log.RequestStart(httpContext);
+            HostingEventSource.Log.RequestStart(httpContext.Request.Method, httpContext.Request.Path);
 
             return new Context
             {
@@ -69,7 +69,7 @@ namespace Microsoft.AspNetCore.Hosting.Internal
                     _diagnosticSource.Write("Microsoft.AspNetCore.Hosting.EndRequest", new { httpContext = httpContext, timestamp = currentTimestamp });
                 }
 
-                HostingEventSource.Log.RequestStop(httpContext);
+                HostingEventSource.Log.RequestStop();
             }
             else
             {
@@ -83,7 +83,8 @@ namespace Microsoft.AspNetCore.Hosting.Internal
                     _diagnosticSource.Write("Microsoft.AspNetCore.Hosting.UnhandledException", new { httpContext = httpContext, timestamp = currentTimestamp, exception = exception });
                 }
 
-                HostingEventSource.Log.RequestStop(httpContext, exception);
+                HostingEventSource.Log.UnhandledException();
+                HostingEventSource.Log.RequestStop();
             }
 
             context.Scope?.Dispose();
