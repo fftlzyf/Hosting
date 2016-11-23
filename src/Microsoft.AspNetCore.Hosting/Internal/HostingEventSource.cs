@@ -2,8 +2,10 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
+using System.Linq;
 using System.Diagnostics.Tracing;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Net.Http.Headers;
 
 namespace Microsoft.AspNetCore.Hosting.Internal
 {
@@ -13,6 +15,11 @@ namespace Microsoft.AspNetCore.Hosting.Internal
         public static readonly HostingEventSource Log = new HostingEventSource();
 
         private HostingEventSource() { }
+
+        // The 'Start' and 'Stop' suffixes on the following event names have special meaning in EventSource. They
+        // enable creating 'activities'.
+        // For more information, take a look at the following blog post:
+        // https://blogs.msdn.microsoft.com/vancem/2015/09/14/exploring-eventsource-activity-correlation-and-causation-features/
 
         [Event(1, Level = EventLevel.Informational)]
         public void HostStart()
@@ -38,10 +45,10 @@ namespace Microsoft.AspNetCore.Hosting.Internal
                     context.Request.ContentType ?? string.Empty,
                     context.Request.ContentLength.HasValue ? context.Request.ContentLength.Value.ToString() : string.Empty,
                     context.Request.Scheme,
-                    context.Request.Host.ToString(),
+                    context.Request.Host.Value,
                     context.Request.PathBase,
                     context.Request.Path,
-                    context.Request.QueryString.ToString());
+                    context.Request.QueryString.Value);
             }
         }
 

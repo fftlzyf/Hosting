@@ -100,15 +100,13 @@ namespace Microsoft.AspNetCore.Hosting.Internal
         public virtual void Start()
         {
             HostingEventSource.Log.HostStart();
+            _logger = _applicationServices.GetRequiredService<ILogger<WebHost>>();
+            _logger.Starting();
 
             Initialize();
 
-            _logger = _applicationServices.GetRequiredService<ILogger<WebHost>>();
             var diagnosticSource = _applicationServices.GetRequiredService<DiagnosticSource>();
             var httpContextFactory = _applicationServices.GetRequiredService<IHttpContextFactory>();
-
-            _logger.Starting();
-
             Server.Start(new HostingApplication(_application, _logger, diagnosticSource, httpContextFactory));
 
             _applicationLifetime.NotifyStarted();
