@@ -68,8 +68,6 @@ namespace Microsoft.AspNetCore.Hosting.Internal
                 {
                     _diagnosticSource.Write("Microsoft.AspNetCore.Hosting.EndRequest", new { httpContext = httpContext, timestamp = currentTimestamp });
                 }
-
-                HostingEventSource.Log.RequestStop();
             }
             else
             {
@@ -84,8 +82,9 @@ namespace Microsoft.AspNetCore.Hosting.Internal
                 }
 
                 HostingEventSource.Log.UnhandledException();
-                HostingEventSource.Log.RequestStop();
             }
+
+            HostingEventSource.Log.RequestStop();
 
             context.Scope?.Dispose();
 
